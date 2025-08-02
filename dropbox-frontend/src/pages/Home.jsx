@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../api";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -38,6 +39,8 @@ export default function Home() {
                 >
                   Download
                 </a>
+                {" | "}
+                <Link to={`/file/${file.id}`}>View</Link>
               </div>
             </li>
           ))}
