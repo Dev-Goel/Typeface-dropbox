@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import API from "../api";
 import { Link } from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 export default function Home() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     API.get("/files")
       .then((res) => {
@@ -19,9 +20,15 @@ export default function Home() {
       });
   }, []);
 
+  const fetchFiles = (search = "") => {
+    setLoading(true);
+    API.get("/files", {params : {q: search}}).then((res) => setFiles(res.data)).catch((err) => console.error("Error fetching files", err)).finally(() => setLoading(false));
+  }
+
   return (
     <div>
       <h2>Uploaded Files</h2>
+      <SearchBar onSearch={fetchFiles}/>
       {loading ? (
         <p>Loading...</p>
       ) : files.length === 0 ? (
@@ -41,6 +48,12 @@ export default function Home() {
                 </a>
                 {" | "}
                 <Link to={`/file/${file.id}`}>View</Link>
+                {" | "}
+                <button onClick={()=> API.delete(`/files/${file.id}`).then(()=>
+                  setFiles(files.filter(f => f.id !== file.id))
+                )}>
+                  Delete
+                </button>
               </div>
             </li>
           ))}

@@ -11,7 +11,8 @@ db.serialize(() => {
       originalname TEXT NOT NULL,
       mimetype TEXT,
       size INTEGER,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      deleted_at TIMESTAMP
     );
   `);
 });
